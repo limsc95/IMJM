@@ -67,7 +67,12 @@ public class SecurityConfig {
                 .cors(cors -> cors
                         .configurationSource(request -> {
                             CorsConfiguration configuration = new CorsConfiguration();
-                            configuration.setAllowedOrigins(List.of(clientDomain, adminDomain));
+                            configuration.setAllowedOrigins(List.of(
+                                    "http://localhost:3000",
+                                    "http://127.0.0.1:3000",
+                                    "http://localhost:3030",
+                                    "http://127.0.0.1:3030"
+                            ));
                             configuration.setAllowedMethods(List.of("*"));
                             configuration.setAllowedHeaders(List.of("*"));
                             configuration.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
@@ -84,7 +89,11 @@ public class SecurityConfig {
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
-                        .successHandler(userSuccessHandler)
+                        .successHandler(userSuccessHandler).failureHandler((request, response, exception) -> {
+                            System.out.println("🔥 OAuth2 로그인 실패 발생!");
+                            exception.printStackTrace(); // 자세한 스택트레이스
+                            response.sendRedirect("/login?error");
+                        })
                 )
 
                 // 경로별 인가 설정
@@ -112,7 +121,7 @@ public class SecurityConfig {
 
                 // 세션 관리 설정
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
 
                 // 예외 처리 설정 (Spring Security 6.1 이상에서의 변경된 방식)

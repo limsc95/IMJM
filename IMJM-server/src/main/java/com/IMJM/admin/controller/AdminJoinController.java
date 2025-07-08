@@ -56,10 +56,9 @@ public class AdminJoinController {
     public void logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("AdminToken", null)
             .httpOnly(true)
-            .secure(true)
-            .sameSite("None")
+            .secure(false)
+            .sameSite("Lax")
             .path("/")
-            .domain("imjm-hair-partner.com")
             .maxAge(0) // 즉시 만료
             .build();
 

@@ -55,7 +55,7 @@ public class AdminJWTFilter extends OncePerRequestFilter {
             }
         }
 
-        if (token == null || jwtUtil.isExpired(token)) {
+        if (token == null || token.trim().isEmpty() || jwtUtil.isExpired(token)) {
             filterChain.doFilter(request, response);
             return;
         }

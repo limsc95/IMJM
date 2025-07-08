@@ -45,10 +45,12 @@ public class UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         ResponseCookie cookie = ResponseCookie.from("Authorization", token)
                 .httpOnly(true) // XSS 방어
-                .secure(true) // HTTPS 환경
-                .sameSite("None") // 크로스 도메인 대응
+                //.secure(true) // HTTPS 환경
+                .secure(false)
+                //.sameSite("None") // 크로스 도메인 대응
+                .sameSite("Lax")
                 .path("/")
-                .domain("imjm-hair.com")
+                //.domain("localhost")
                 .maxAge(60 * 60 * 24)
                 .build();
 
@@ -68,7 +70,7 @@ public class UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         Cookie cookie = new Cookie(key, token);
         cookie.setMaxAge(60*60*24);
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);  // https 만 허용 할 경우
+        //cookie.setSecure(true);  // https 만 허용 할 경우
         cookie.setPath("/");
 
         return cookie;

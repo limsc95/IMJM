@@ -132,10 +132,9 @@ public class UserService {
     public void logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("Authorization", null)
             .httpOnly(true)
-            .secure(true)
-            .sameSite("None")
+            .secure(false)
+            .sameSite("Lax")
             .path("/")
-            .domain("imjm-hair.com")
             .maxAge(0) // 즉시 만료
             .build();
 

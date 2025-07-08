@@ -47,7 +47,7 @@ public class UserJWTFilter extends OncePerRequestFilter {
 
         String token = jwtUtil.resolveUserToken(request);
 
-        if (token == null) {
+        if (token == null || token.trim().isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
